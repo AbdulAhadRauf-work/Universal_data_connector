@@ -1,9 +1,12 @@
-
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
+
 
 class BaseConnector(ABC):
+    def __init__(self, data_file: Path) -> None:
+        self.data_file = data_file
 
     @abstractmethod
-    def fetch(self, **kwargs) -> List[Dict[str, Any]]:
-        pass
+    def fetch(self, **filters: Any) -> list[dict[str, Any]]:
+        """Fetch data from the concrete data source."""

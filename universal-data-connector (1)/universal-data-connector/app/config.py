@@ -1,11 +1,13 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Universal Data Connector"
-    MAX_RESULTS: int = 10
+    app_name: str = "Universal Data Connector"
+    app_version: str = "1.0.0"
+    default_voice_limit: int = 10
+    max_limit: int = 50
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
 
 settings = Settings()

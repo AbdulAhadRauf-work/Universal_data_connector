@@ -1,13 +1,17 @@
+from collections.abc import Mapping
 
-from typing import List, Dict
+from app.models.common import DataType
 
-def identify_data_type(data: List[Dict]) -> str:
+
+def identify_data_type(data: list[Mapping[str, object]]) -> DataType:
     if not data:
-        return "empty"
-    if "date" in data[0]:
-        return "time_series"
-    if "ticket_id" in data[0]:
-        return "tabular_support"
-    if "customer_id" in data[0]:
-        return "tabular_crm"
-    return "unknown"
+        return DataType.empty
+
+    sample = data[0]
+    if "date" in sample and "value" in sample:
+        return DataType.time_series
+    if any(key.endswith("_id") for key in sample) and "created_at" in sample:
+        return DataType.tabular
+    if any(isinstance(value, dict) for value in sample.values()):
+        return DataType.hierarchical
+    return DataType.unknown
